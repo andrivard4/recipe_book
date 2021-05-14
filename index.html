@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:700,400|Roboto:400,300">
+  <title></title>
+
+  <script type="text/javascript">
+
+    // Function to check target element's position
+  var setScrollPosition = (container, element) => {
+    var viewportHeight = window.innerHeight;
+    var viewportWidth = window.innerWidth;
+    // get bounding client rect from element
+    var rect = container.getBoundingClientRect();
+    // grab measurements and percentage conversion
+    var fromTop = rect.top;
+    var fraction = rect.top/viewportHeight;
+    var percentage = fraction * 100;
+    element.style.top = -5*Math.round(percentage<20? 0: percentage) + "px";
+  }
+
+  var setCurvePosition = (element) => {
+    var viewportHeight = window.innerHeight;
+    var viewportWidth = window.innerWidth;
+    // get bounding client rect from element
+    var rect = element.getBoundingClientRect();
+    // grab measurements and percentage conversion
+    var fromTop = rect.top;
+    var fraction = rect.top/viewportHeight;
+    var percentage = fraction * 100;
+    console.log(fromTop, fraction);
+    element.style.marginTop = -10 + 10*fraction + "vw";
+  }
+
+  var setBottomCurvePosition = (element) => {
+    var viewportHeight = window.innerHeight;
+    var viewportWidth = window.innerWidth;
+    // get bounding client rect from element
+    var rect = element.getBoundingClientRect();
+    // grab measurements and percentage conversion
+    var fromTop = rect.top;
+    var fraction = rect.top/viewportHeight;
+    var percentage = fraction * 100;
+    console.log(fromTop, fraction);
+    element.style.top = -17 + 5*fraction + "vw";
+  }
+
+  var setFilterPosition = (container, element) => {
+    var viewportHeight = window.innerHeight;
+    var viewportWidth = window.innerWidth;
+    // get bounding client rect from element
+    var rect = container.getBoundingClientRect();
+    // grab measurements and percentage conversion
+    var fromTop = rect.top;
+    var fraction = rect.top/viewportHeight;
+    var percentage = fraction * 100;
+    element.style.bottom = -3*Math.round(percentage<30? 0: percentage) + "px";
+    document.getElementById('blur').style.opacity = 70 - percentage<30? 0: percentage;
+  }
+
+
+
+  window.addEventListener("load", function(e) {
+
+    var top_curve = document.getElementById("top-curve");
+    var bottom_curve = document.getElementById("bottom_curve");
+    var element = document.getElementById("home-img");
+    var container = document.getElementsByClassName('phone')[0];
+
+    setScrollPosition(container, element);
+    setCurvePosition(top_curve)
+    setBottomCurvePosition(bottom_curve)
+    reviews(null, document.getElementsByClassName("review"), document.getElementsByClassName("status-element"));
+  })
+
+  document.addEventListener ('scroll', function(e) {
+
+    var top_curve = document.getElementById("top-curve");
+    var bottom_curve = document.getElementById("bottom_curve");
+    var element = document.getElementById("home-img");
+    var container = document.getElementsByClassName('phone')[0];
+    setBottomCurvePosition(bottom_curve)
+    setScrollPosition(container, element);
+    setCurvePosition(top_curve)
+  })
+
+  document.addEventListener ('scroll', function(e) {
+    var element = document.getElementById("filter");
+    var container = document.getElementsByClassName('phone')[1];
+
+    setFilterPosition(container, element);
+  })
+
+  var reviews = (i, elements, status) => {
+    // If we dont have i set, set it to the last element
+    if (i == null) {
+      i = elements.length-1;
+    }
+    // Hide privous element
+    elements[i].classList.remove('in')
+    elements[i].classList.add('out')
+    // Get index of next element
+    i = (i+1)%elements.length;
+    // If we are at the start, reset the inticator to the start
+    if (i == 0) {
+      for (var j = 0; j < status.length; j++) {
+        let current = status[j].childNodes[0];
+        status[j].childNodes[0].remove();
+        current.classList.remove('animate')
+        status[j].appendChild(current)
+      }
+    }
+    // Animate the current
+    status[i].childNodes[0].classList.add('animate')
+    elements[i].classList.remove('out')
+    elements[i].classList.add('in')
+    setTimeout(()=>{reviews(i, elements, status)}, 10000)
+  }
+
+  </script>
+</head>
+<body>
+  <div class="hero">
+    <div class="fork">
+      <img src="img/fork.svg">
+    </div>
+    <div class="burger">
+      <img src="img/burger.svg">
+    </div>
+    <div class="background">
+      <div class="content">
+        <h1>All your recipes,<br>All in one place.</h1>
+        <p class="prop">Find, save, edit, review, and post recipes from all over the world on one simple app.</p>
+        <a href="#cta"><h3>Try it out</h3></a>
+        <div class="logo">
+          <p>Recipe</p>
+          <svg width="78" height="76" viewBox="0 0 78 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M68.5372 6.39107C68.0042 5.85847 67.1403 5.85803 66.6071 6.39107L52.4564 20.541C51.9232 21.0741 51.9232 21.938 52.4563 22.4712C52.7229 22.7376 53.072 22.8707 53.4214 22.8707C53.7706 22.8707 54.12 22.7376 54.3866 22.4712L68.5372 8.3212C69.0701 7.78801 69.0701 6.92396 68.5372 6.39107Z" fill="white"/>
+            <path d="M72.3845 10.1785C71.8513 9.64575 70.9874 9.64575 70.4543 10.1785L56.3039 24.3287C55.771 24.8619 55.771 25.7258 56.3037 26.2589C56.5703 26.5253 56.9197 26.6585 57.2689 26.6585C57.618 26.6585 57.9674 26.5253 58.234 26.2589L72.3845 12.1085C72.9175 11.5754 72.9175 10.7114 72.3845 10.1785Z" fill="white" stroke="white" stroke-width="0.5"/>
+            <path d="M59.0347 34.0734L76.6005 16.5076C77.1335 15.9744 77.1335 15.1105 76.6005 14.5775C76.0673 14.0449 75.2034 14.0444 74.6703 14.5775L57.1048 32.1433C54.9408 34.3072 51.6318 34.875 48.871 33.5565C48.3218 33.2944 47.666 33.427 47.2621 33.8821L41.2936 40.6067C41.2912 40.6093 41.2885 40.6115 41.2861 40.6142C41.2838 40.6168 41.282 40.6196 41.2796 40.6223L15.4828 69.6859C15.4763 69.6934 15.4697 69.7009 15.4634 69.7085C15.3783 69.8084 15.298 69.8961 15.2167 69.9776C13.5133 71.6808 10.742 71.6806 9.03943 69.9776C8.21441 69.1528 7.76005 68.0557 7.76005 66.8889C7.76005 65.7222 8.21441 64.6253 9.04091 63.7988C9.12018 63.7191 9.20776 63.639 9.30855 63.5532C9.31627 63.5469 9.32369 63.5403 9.33111 63.5338L25.4585 49.2194C26.0223 48.719 26.0735 47.8564 25.5733 47.2928C25.0729 46.7289 24.2102 46.6774 23.6467 47.1781L7.52997 61.483C7.37589 61.6144 7.23799 61.7416 7.10945 61.8703C5.76891 63.2108 5.03058 64.9931 5.03058 66.8889C5.03058 68.7846 5.76876 70.5671 7.1093 71.9076C8.49318 73.2912 10.3105 73.9831 12.1283 73.9829C13.9453 73.9829 15.7631 73.2913 17.1459 71.9084C17.277 71.7776 17.4039 71.6395 17.5342 71.4869L37.1921 49.3392L56.8503 71.4872C56.9804 71.64 57.1073 71.778 57.2375 71.9079C58.6211 73.2915 60.4386 73.9832 62.2561 73.9832C64.0737 73.9832 65.8913 73.2913 67.275 71.9078C70.0419 69.1404 70.0419 64.638 67.2758 61.8714C67.1451 61.7404 67.0069 61.6135 66.8545 61.4833L44.234 41.4056L48.6596 36.4193C52.2454 37.6898 56.3028 36.8048 59.0347 34.0734ZM65.0531 63.534C65.0605 63.5405 65.0681 63.547 65.0756 63.5534C65.1755 63.6384 65.2632 63.7188 65.3447 63.8001C67.0478 65.5033 67.0478 68.2745 65.3449 69.9773C63.6416 71.6804 60.8704 71.6803 59.1666 69.9766C59.086 69.896 59.0054 69.8081 58.9204 69.7082C58.914 69.7006 58.9075 69.6931 58.9009 69.6856L39.0167 47.2832L42.4217 43.4468L65.0531 63.534Z" fill="white"/>
+            <path d="M59.0339 34.0736L76.5999 16.5078C77.133 15.9747 77.133 15.1108 76.5999 14.5777C76.0667 14.0451 75.2028 14.0447 74.6698 14.5777L57.104 32.1435C54.9399 34.3074 51.6309 34.8752 48.8701 33.5568C48.3208 33.2946 47.665 33.4272 47.2611 33.8823L41.2925 40.607C41.2901 40.6095 41.2875 40.6117 41.2851 40.6144C41.2827 40.6171 41.2809 40.6199 41.2786 40.6226L15.4814 69.6862C15.4748 69.6936 15.4683 69.7012 15.4619 69.7087C15.3769 69.8086 15.2966 69.8964 15.2152 69.9779C13.5119 71.681 10.7405 71.6809 9.0379 69.9779C8.21287 69.153 7.7585 68.0559 7.7585 66.8892C7.7585 65.7225 8.21287 64.6255 9.03939 63.799C9.11865 63.7193 9.20623 63.6393 9.30702 63.5535C9.31474 63.5471 9.32216 63.5406 9.32959 63.534L25.4573 49.2196C26.021 48.7192 26.0722 47.8567 25.572 47.293C25.0716 46.7291 24.2089 46.6776 23.6454 47.1783L7.52842 61.4832C7.37434 61.6146 7.23644 61.7418 7.10789 61.8705C5.76733 63.211 5.02899 64.9933 5.02899 66.8892C5.02899 68.7849 5.76718 70.5673 7.10774 71.9078C8.49164 73.2914 10.309 73.9833 12.1268 73.9832C13.9438 73.9832 15.7616 73.2916 17.1445 71.9086C17.2756 71.7778 17.4025 71.6398 17.5328 71.4872L37.191 49.3394L56.8494 71.4875C56.9796 71.6402 57.1065 71.7783 57.2367 71.9081C58.6203 73.2917 60.4378 73.9834 62.2553 73.9834C64.073 73.9834 65.8906 73.2916 67.2744 71.908C70.0413 69.1407 70.0413 64.6383 67.2751 61.8717C67.1445 61.7406 67.0063 61.6137 66.8538 61.4835L44.233 41.4059L48.6587 36.4196C52.2445 37.69 56.302 36.805 59.0339 34.0736ZM65.0524 63.5342C65.0598 63.5407 65.0674 63.5472 65.0749 63.5536C65.1748 63.6387 65.2626 63.719 65.344 63.8003C67.0471 65.5035 67.0471 68.2747 65.3442 69.9776C63.6409 71.6806 60.8696 71.6806 59.1658 69.9768C59.0852 69.8962 59.0046 69.8083 58.9196 69.7085C58.9132 69.7009 58.9067 69.6933 58.9001 69.6859L39.0156 47.2834L42.4207 43.447L65.0524 63.5342Z" fill="white" stroke="white" stroke-width="0.5"/>
+            <path d="M64.44 2.4164C63.9068 1.88366 63.0429 1.88366 62.5098 2.4164L44.9441 19.9824C42.2119 22.7142 41.3272 26.7711 42.5977 30.3577L37.1922 35.1555L31.9972 30.5444C34.6838 25.2583 33.703 18.84 29.4407 14.5776C25.2075 10.3445 20.3043 7.36546 15.6342 6.18968C10.759 4.96255 6.57924 5.78178 3.86368 8.49715C1.14813 11.2125 0.32874 15.3928 1.55619 20.2676C2.73213 24.9373 5.71101 29.8405 9.94451 34.0735C14.2068 38.3361 20.625 39.3168 25.9116 36.6301C25.9116 36.6301 30.9919 42.3535 31.0563 42.4263C31.3261 42.7301 31.7009 42.8849 32.0776 42.8849C32.3999 42.8849 32.7232 42.7715 32.9831 42.5408L45.1353 31.7548C45.5902 31.3509 45.7228 30.6948 45.4608 30.1459C44.142 27.3848 44.71 24.0761 46.8741 21.9123L64.44 4.34654C64.973 3.81335 64.973 2.94944 64.44 2.4164ZM32.1918 39.5939L27.2238 33.9969C26.7838 33.5013 26.0508 33.3929 25.4867 33.7413C21.111 36.4395 15.5134 35.7829 11.8742 32.1437C7.98452 28.2542 5.2602 23.8 4.20287 19.6012C3.21945 15.6947 3.78442 12.4365 5.79384 10.4273C7.80297 8.41773 11.0612 7.85308 14.9676 8.83662C19.1665 9.89379 23.621 12.6179 27.5104 16.5076C31.1496 20.1465 31.8063 25.7441 29.1079 30.1197C28.76 30.684 28.8679 31.4166 29.3635 31.8568L35.1361 36.9802L32.1918 39.5939Z" fill="white" stroke="white" stroke-width="0.5"/>
+          </svg>
+          <p>Book</p>
+        </div>
+      </div>
+    </div>
+    <img class="curve" id="top-curve" src="img/bg.svg">
+  </div>
+  <div class="content">
+    <div class="grid content-left">
+      <div>
+        <h2> Get some <br> inspir<span class="break"></span>ation </h2>
+        <p>
+          View top picks and try all different kinds of recipes.
+        </p>
+        <p>
+          Save recipes for later and keep track of what you loved.
+        </p>
+        <img src="img/home-static.jpg" class="s-show" alt="">
+      </div>
+      <div class="phone s-hidden">
+        <div class="phone-content">
+          <img id="home-img" src="img/home.png">
+        </div>
+        <img class="phone-border" src="img/iphone.svg">
+      </div>
+    </div>
+    <div class="grid content-right">
+      <div class="phone s-hidden">
+        <div class="phone-content">
+          <img src="img/unfilter.png">
+          <img id="blur" src="img/blur.png">
+          <img id="filter" src="img/filter.png">
+        </div>
+        <img class="phone-border" src="img/iphone.svg">
+      </div>
+      <div>
+        <h2> Search for what fits the mood </h2>
+        <p>
+          Want to find something quick and easy? Or maybe an elaborate meal for date night? Our advanced search has your back.
+        </p>
+        <img src="img/filter-static.jpg" class="s-show" alt="">
+      </div>
+    </div>
+    <div class="grid review-container">
+      <div><h2>Don't take our word for it...</h2></div>
+      <div class="review-options-container">
+        <div class="review out">
+          <img src="img/andrew.jpg" class="pfp">
+          <div class="quote-open">"</div>
+          <div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididu...</p>
+            <p class="username"> - Binging with Babish </p>
+          </div>
+          <div class="quote-close">"</div>
+        </div>
+        <div class="review out">
+          <img src="img/chef.png" class="pfp">
+          <div class="quote-open">"</div>
+          <div>
+            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p class="username"> - Chef John </p>
+          </div>
+          <div class="quote-close">"</div>
+        </div>
+        <div class="review out">
+          <img src="https://yt3.ggpht.com/ytc/AAUvwniWZcWaIblzVQgNUIQ9g13Ed7ZsyojOMO0t-b7lrA=s900-c-k-c0x00ffffff-no-rj" class="pfp">
+          <div class="quote-open">"</div>
+          <div>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="username"> - Ethan Chlebowski </p>
+          </div>
+          <div class="quote-close">"</div>
+        </div>
+      </div>
+      <div class="status">
+        <div class="status-element"><div></div></div>
+        <div class="status-element"><div></div></div>
+        <div class="status-element"><div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer" id="cta">
+    <img class="footer-curve" id="bottom_curve" src="img/bg.svg">
+    <div class="background">
+      <div class="content">
+        <h1>Give it a shot!</h1>
+        <p class="prop">Download on the Apple App Store or the Google Play Store and start cooking today!</p>
+        <div class="download">
+          <img src="img/google.svg"/>
+          <img src="img/apple.svg"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
